@@ -1,0 +1,99 @@
+# =============================================
+# springboot configurations
+# ---------------------------------------------
+spring:
+#  application:
+#    name: ${OPENSHIFT_APP_NAME:fuse-auth-integration-api}
+  datasource:
+    #initialize: false
+    driverClassName: com.mysql.cj.jdbc.Driver
+#    driverClassName: com.mysql.jdbc.Driver
+    url: "jdbc:mysql://localhost:3306/ems?autoReconnect=true&useSSL=false"
+#    jdbcUrl: "jdbc:mysql://localhost:3306/ems?autoReconnect=true&useSSL=false"
+    username: root
+    password: root
+    platform: mysql
+    initialization-mode: always
+# testOnBorrow: true
+# testWhileIdle: true
+# timeBetweenEvictionRunsMillis: 60000
+# minEvictableIdleTimeMillis: 30000
+# validationQuery: SELECT 1
+# max-active: 15
+# max-idle: 10
+# max-wait: 8000
+#  jpa:
+#   hibernate.ddl-auto: update
+#    generate-ddl: true
+#    show-sql: true
+    hikari:
+     # maximum number of milliseconds that a client will wait for a connection
+     connection-timeout: 20000
+     # minimum number of idle connections maintained by HikariCP in a connection pool
+     minimum-idle: 10 
+     # maximum pool size
+     maximum-pool-size: 10 
+     # maximum idle time for connection
+     idle-timeout: 10000 
+     # maximum lifetime in milliseconds of a connection in the pool after it is closed.
+     max-lifetime: 1000 
+     # default auto-commit behavior.
+     auto-commit: true 
+    
+logging:
+   config: classpath:logback.xml
+#  level: INFO
+
+# options from org.apache.camel.spring.boot.CamelConfigurationProperties can be configured here
+camel:
+  springboot:
+#   name: ${OPENSHIFT_APP_NAME:fuse-auth-integration-api}
+    name: EmployeeRouteBuilder
+#   main-run-controller: true
+#  component:
+#   servlet:
+#     mapping:
+#       contextPath: /api/v${api.version}/*
+#   jmxEnabled: true
+
+# lets listen on all ports to ensure we can be invoked from the pod ip address
+server:
+  address: 0.0.0.0
+  port: 8082
+
+# lets use a different management port in case you need to listen to HTTP requests on 8080
+management:
+  security:
+    enabled: false
+  address: 0.0.0.0
+  port: 8081
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+# =============================================
+# springboot actuator configurations
+# ---------------------------------------------
+# disable all management endpoints except health
+endpoints:
+  enabled: false
+  health:
+    enabled: true
+  metrics:
+    enabled: true
+  prometheus:
+    enabled: true
+    # if you want to change the default prometheus endpoint, just change the 'id' to another value.
+    id: prometheus
+
+# =============================================
+# bancs db api parameters
+# ---------------------------------------------
+bancsdbapi:
+  api-key-name: bancs
+  host: localhost
+  port: 8080
+# context-path: /camel/getAccountDetails
+  context-path: /camel
+# status-path: ${OPENSHIFT_PRODUCT_STATUS_CTX:/actuator/health}
